@@ -1,0 +1,29 @@
+library(ISLR)
+library(pls)
+set.seed(1)
+
+#Load data
+X1 <- read.csv("C:/Users/Elaine/Desktop/10cmpcr.csv", header=TRUE, row.names = 1)
+
+#Fit PCR model
+pcr_smfull<-pcr(SM~., data = X1, scale=T,validation = "LOO")
+
+summary(pcr_smfull)
+pcr_smfull$coefficients
+pcr_smfull$scores
+pcr_smfull$loadings
+
+pcr_smfull$model
+#Show Cv plot
+plot(RMSEP(pcr_smfull),legendpos="topright")
+
+#Fit complete model with 3 components
+pcr_sm<-pcr(SM~., data = X1, scale=T, ncomp=3)
+summary(pcr_sm)
+
+#Plot % explained varainces
+plot(explvar(pcr_smfull),type="b",xlab = "No.of Components")
+explvar(pcr_smfull)
+
+#Final regression coef.
+coef(pcr_sm)
